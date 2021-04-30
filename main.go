@@ -7,7 +7,6 @@ import (
     "strconv"
 )
 
-var bankAccount int
 
 
 func withdrawAcnt(withdrawAmnt int) int { //withdraw function, return int
@@ -23,14 +22,41 @@ func depositAcnt(depositAmnt int) {
     bankAccount += depositAmnt
 }
 
+func initBalance() int {
+    var initAcnt string
+    var acntBalance int
+    if database.Get("balance") == 0 {
+        fmt.Println("Is your bank account initiated? (y/n)")
+        fmt.Scanln(&initAcnt)
+        if initAcnt == "y" {
+            fmt.Scanf(&acntBalance)
+            return acntBalance
+        } 
+    } 
+    return 0
+    
+}
+
 func main() {
-    var choice, withdraw, deposit int
+    var choice, withdraw, deposit, setBalance, currentBalance int
     var exit bool = true
+    setBalance = initBalance()
+    if setBalance != 0 {
+        database.Set("balance", strconv.Itoa(setBalance))
+    } 
+    currentBalance = strconv.Atoi(database.Get("balance"))
+
+
+
+
+    
+    
     //set bank account balance
-    fmt.Println("current balance?")
-    fmt.Scanln(&bankAccount)
+    //  fmt.Println("current balance?")
+    //  fmt.Scanln(&bankAccount)
     // = strconv.Itoa(bankAccount)
-    database.Set("balance", strconv.Itoa(bankAccount))
+    
+    
 
     for exit {
     
