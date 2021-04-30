@@ -3,10 +3,12 @@ package main
 import (
     "fmt"
     "os"
+    "github.com/replit/database-go"
+    "strconv"
 )
 
+var bankAccount int
 
-var bankAccount = 12342
 
 func withdrawAcnt(withdrawAmnt int) int { //withdraw function, return int
     bankAccount -= withdrawAmnt
@@ -19,14 +21,17 @@ func withdrawAcnt(withdrawAmnt int) int { //withdraw function, return int
 
 func depositAcnt(depositAmnt int) {
     bankAccount += depositAmnt
-    
 }
 
 func main() {
-    var choice int
-    var withdraw int
-    var deposit int
+    var choice, withdraw, deposit int
     var exit bool = true
+    //set bank account balance
+    fmt.Println("current balance?")
+    fmt.Scanln(&bankAccount)
+    // = strconv.Itoa(bankAccount)
+    database.Set("balance", strconv.Itoa(bankAccount))
+
     for exit {
     
     fmt.Printf("%d \n 1. withdraw \n 2. deposit \n 3. exit\n", bankAccount)
