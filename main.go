@@ -7,7 +7,7 @@ import (
     "strconv"
 )
 
-
+var bankAccount int
 
 func withdrawAcnt(withdrawAmnt int) int { //withdraw function, return int
     bankAccount -= withdrawAmnt
@@ -23,40 +23,53 @@ func depositAcnt(depositAmnt int) {
 }
 
 func initBalance() int {
-    var initAcnt string
-    var acntBalance int
-    if database.Get("balance") == 0 {
+    var (
+        initAcnt,
+        getBalance string
+        intAccount, acntBalance int
+    )
+    var getErr error
+    getBalance, getErr = database.Get("balance")
+    if getErr != nil {
+        fmt.Println(getErr.Error())
+        return 1
+    }
+    intAccount, getErr = strconv.Atoi(getBalance)
+    if getErr != nil {
+        fmt.Println(getErr.Error())
+        return 1
+    }
+    if intAccount == 0 {
         fmt.Println("Is your bank account initiated? (y/n)")
         fmt.Scanln(&initAcnt)
+
         if initAcnt == "y" {
-            fmt.Scanf(&acntBalance)
+            fmt.Scanln("%d", acntBalance)
             return acntBalance
         } 
-    } 
-    return 0
-    
+    }
+    return 0 
 }
 
 func main() {
     var choice, withdraw, deposit, setBalance, currentBalance int
+    var bl string
     var exit bool = true
+    var err error
     setBalance = initBalance()
-    if setBalance != 0 {
-        database.Set("balance", strconv.Itoa(setBalance))
-    } 
-    currentBalance = strconv.Atoi(database.Get("balance"))
+    stringBalance := strconv.Itoa(setBalance) 
+    if setBalance != 1 {
+        database.Set("balance", stringBalance)
+    }
+    //reuse variable
+    bl, err = database.Get("balance")
+    if err != nil {
+        fmt.Println(err.Error())
+        return
+    }
+    currentBalance, err = strconv.Atoi(bl)
 
 
-
-
-    
-    
-    //set bank account balance
-    //  fmt.Println("current balance?")
-    //  fmt.Scanln(&bankAccount)
-    // = strconv.Itoa(bankAccount)
-    
-    
 
     for exit {
     
